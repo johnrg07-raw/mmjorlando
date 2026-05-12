@@ -93,7 +93,7 @@
       overflow: hidden;
       pointer-events: none;
     }
-    .video-bg iframe {
+    #yt-player, .video-bg iframe {
       position: absolute;
       top: 50%; left: 50%;
       transform: translate(-50%, -50%);
@@ -165,6 +165,7 @@
       position: absolute;
       inset: 0;
       background: var(--logo-img) center/contain no-repeat;
+      mix-blend-mode: screen;
     }
     .logo-center {
       clip-path: inset(0 40% 47% 40%);
@@ -496,11 +497,7 @@
 <!-- HERO -->
 <section id="home">
   <div class="video-bg">
-    <iframe
-      src="https://www.youtube.com/embed/Xq5zS7htDgg?autoplay=1&mute=1&loop=1&playlist=Xq5zS7htDgg&controls=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=1"
-      allow="autoplay; fullscreen"
-      allowfullscreen
-      title="Mamajuana Lounge &amp; Bar"></iframe>
+    <div id="yt-player"></div>
   </div>
   <div class="video-overlay"></div>
   <div class="hero-content">
@@ -969,6 +966,58 @@
     const nav = document.getElementById('navLinks');
     if (!e.target.closest('nav')) nav.classList.remove('open');
   });
+</script>
+
+<script>
+  // Load YouTube IFrame API
+  (function(){
+    var s = document.createElement('script');
+    s.src = 'https://www.youtube.com/iframe_api';
+    document.head.appendChild(s);
+  })();
+
+  var ytPlayer;
+  function onYouTubeIframeAPIReady() {
+    ytPlayer = new YT.Player('yt-player', {
+      videoId: 'Xq5zS7htDgg',
+      playerVars: {
+        autoplay: 1,
+        mute: 1,
+        loop: 1,
+        playlist: 'Xq5zS7htDgg',
+        controls: 0,
+        rel: 0,
+        modestbranding: 1,
+        playsinline: 1,
+        iv_load_policy: 3,
+        disablekb: 1
+      },
+      events: {
+        onReady: function(e) {
+          e.target.mute();
+          e.target.playVideo();
+        },
+        onStateChange: function(e) {
+          // Keep looping if video ends
+          if (e.data === YT.PlayerState.ENDED) {
+            e.target.playVideo();
+          }
+        }
+      }
+    });
+  }
+
+  // iOS fallback: attempt play on first touch
+  document.addEventListener('touchstart', function tryPlay() {
+    if (ytPlayer && ytPlayer.getPlayerState) {
+      var state = ytPlayer.getPlayerState();
+      if (state !== 1) { // 1 = playing
+        ytPlayer.mute();
+        ytPlayer.playVideo();
+      }
+    }
+    document.removeEventListener('touchstart', tryPlay);
+  }, { once: true });
 </script>
 </body>
 </html>
