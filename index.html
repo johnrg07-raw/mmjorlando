@@ -85,13 +85,39 @@
       text-align: center;
       padding: 6rem 2rem 4rem;
       position: relative;
-      background: radial-gradient(ellipse at center top, #1a0a00 0%, #000 60%);
+      overflow: hidden;
+      background: #000;
     }
-    #home::before {
-      content: '';
-      position: absolute; inset: 0;
-      background: linear-gradient(180deg, transparent 50%, rgba(0,0,0,0.8) 100%);
+    .video-bg {
+      position: absolute; inset: 0; z-index: 0;
+      overflow: hidden;
       pointer-events: none;
+    }
+    .video-bg iframe {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      /* Cover for 9:16 vertical video on horizontal screen */
+      height: 177.78vw;
+      width: 100vw;
+      min-height: 100vh;
+      min-width: 56.25vh;
+      border: none;
+      pointer-events: none;
+    }
+    .video-overlay {
+      position: absolute; inset: 0; z-index: 1;
+      background: linear-gradient(180deg,
+        rgba(0,0,0,0.55) 0%,
+        rgba(0,0,0,0.35) 40%,
+        rgba(0,0,0,0.55) 70%,
+        rgba(0,0,0,0.85) 100%);
+      pointer-events: none;
+    }
+    .hero-content {
+      position: relative; z-index: 2;
+      display: flex; flex-direction: column; align-items: center;
+      width: 100%;
     }
     .hero-tag {
       font-family: 'Aboreto', cursive;
@@ -469,6 +495,15 @@
 
 <!-- HERO -->
 <section id="home">
+  <div class="video-bg">
+    <iframe
+      src="https://www.youtube.com/embed/Xq5zS7htDgg?autoplay=1&mute=1&loop=1&playlist=Xq5zS7htDgg&controls=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=1"
+      allow="autoplay; fullscreen"
+      allowfullscreen
+      title="Mamajuana Lounge &amp; Bar"></iframe>
+  </div>
+  <div class="video-overlay"></div>
+  <div class="hero-content">
   <p class="hero-tag">#UnwindWithUs</p>
   <div class="hero-logo-wrap" role="img" aria-label="Mamajuana Lounge &amp; Bar logo">
     <div class="logo-layer logo-center"></div>
@@ -487,6 +522,7 @@
     <a href="https://www.instagram.com/mamajuanaorlando/" target="_blank" rel="noopener">Instagram</a>
     <a href="https://x.com/mamajuanalb" target="_blank" rel="noopener">X / Twitter</a>
   </div>
+  </div><!-- /hero-content -->
 </section>
 
 <!-- MENU -->
