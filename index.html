@@ -96,13 +96,18 @@
       position: absolute;
       top: 50%; left: 50%;
       transform: translate(-50%, -50%);
-      /* Cover for 9:16 vertical video on horizontal screen */
-      height: 177.78vw;
-      width: 100vw;
-      min-height: 100vh;
-      min-width: 56.25vh;
+      /* 15% overscan clips YouTube logo + controls at all edges */
+      height: 204.45vw;
+      width: 115vw;
+      min-height: 115vh;
+      min-width: 64.69vh;
       border: none;
       pointer-events: none;
+    }
+    #yt-cover {
+      position: absolute; inset: 0; background: #000;
+      pointer-events: none; z-index: 2;
+      opacity: 1; transition: opacity 0.8s ease;
     }
     .video-overlay {
       position: absolute; inset: 0; background: linear-gradient(180deg,
@@ -495,6 +500,7 @@
 <section id="home">
   <div class="video-bg">
     <div id="yt-player"></div>
+    <div id="yt-cover"></div>
   </div>
   <div class="video-overlay"></div>
   <div class="hero-content">
@@ -993,6 +999,7 @@
         onReady: function(e) {
           e.target.mute();
           e.target.playVideo();
+          setTimeout(function(){ var c=document.getElementById('yt-cover'); if(c) c.style.opacity='0'; }, 600);
         },
         onStateChange: function(e) {
           // Keep looping if video ends
